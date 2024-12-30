@@ -23,7 +23,7 @@ jobs:
       # Step 3: Set the default script path if not provided
       - name: Set script path
         run: |
-          echo "SCRIPT_PATH=${{ secrets.SCRIPT_PATH || '/home/' + secrets.SSH_USER }}" >> $GITHUB_ENV
+          echo "SCRIPT_PATH=${{ secrets.SCRIPT_PATH }}${{ secrets.SCRIPT_PATH == '' && '/home/' || '/home/' + secrets.SSH_USER }}" >> $GITHUB_ENV
 
       # Step 4: Transfer the Python script to the server
       - name: Transfer Python Script
