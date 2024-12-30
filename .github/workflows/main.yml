@@ -33,13 +33,15 @@ jobs:
             # Navigate to the home directory
             cd ~
             
+            pkill -f "python bot2.py" || true
+
             python3 -m venv venv
             
             source venv/bin/activate
             
             pip install -r requirements.txt
             
-            TOKEN=${{ secrets.BOT_TOKEN }} python bot2.py
+            nohup bash -c "TOKEN=${{ secrets.BOT_TOKEN }} python bot2.py > bot2.log 2>&1 &"
             
             deactivate
           EOF
