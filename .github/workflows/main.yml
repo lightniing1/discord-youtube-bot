@@ -30,7 +30,6 @@ jobs:
       - name: Run Python Script on Server
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
-            # Navigate to the home directory
             cd ~
             
             pkill -f "python bot2.py" || true
@@ -42,8 +41,15 @@ jobs:
             pip install -r requirements.txt
             
             nohup bash -c "TOKEN=${{ secrets.BOT_TOKEN }} python bot2.py > bot2.log 2>&1 &"
-
-            head -n 100 bot2.log
             
             deactivate
+          EOF
+
+      - name: Check Script Output
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            cd ~
+            
+            echo "Checking the script output:"
+            head -n 10 bot2.log
           EOF
