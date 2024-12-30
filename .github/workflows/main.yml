@@ -42,6 +42,8 @@ jobs:
             pip install -r requirements.txt
             
             nohup bash -c "TOKEN=${{ secrets.BOT_TOKEN }} python bot2.py > bot2.log 2>&1 &"
+
+            head -n 100 bot2.log
             
             deactivate
           EOF
