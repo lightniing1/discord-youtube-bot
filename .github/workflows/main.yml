@@ -3,11 +3,11 @@ name: Deploy Python Script
 on:
   push:
     branches:
-      - main  # Deploy only when changes are pushed to the main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use a self-hosted runner if preferred
 
     steps:
       # Step 1: Checkout the repository
@@ -20,15 +20,20 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 3: Transfer the Python script to the server
+      # Step 3: Set the default script path if not provided
+      - name: Set script path
+        run: |
+          echo "SCRIPT_PATH=${{ secrets.SCRIPT_PATH || '/home/' + secrets.SSH_USER }}" >> $GITHUB_ENV
+
+      # Step 4: Transfer the Python script to the server
       - name: Transfer Python Script
         run: |
-          scp my_script.py ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SCRIPT_PATH:-/home/${{ secrets.SSH_USER }}/}}
+          scp my_script.py ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$SCRIPT_PATH
 
-      # Step 4: Execute the script or restart the service on the server
-      - name: Restart Service or Run Script
+      # Step 5: Execute the Python script on the server
+      - name: Run Python Script on Server
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd ${{ secrets.SCRIPT_PATH:-/home/${{ secrets.SSH_USER }}/}}
-          python3 my_script.py
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            cd $SCRIPT_PATH
+            python3 my_script.py
           EOF
