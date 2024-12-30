@@ -31,5 +31,5 @@ jobs:
         run: |
           ssh ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}] << EOF
             cd $SCRIPT_PATH
-            python3 my_script.py
+            python3 bot2.py
           EOF
