@@ -21,19 +21,15 @@ jobs:
           
       - name: Set script path
         run: |
-          if [ -z "${{ secrets.SCRIPT_PATH }}" ]; then
-            echo "SCRIPT_PATH=/home/" >> $GITHUB_ENV
-          else
-            echo "SCRIPT_PATH=/home/${{ secrets.SSH_USER }}" >> $GITHUB_ENV
-          fi
+          echo "SCRIPT_PATH=/home/${{ secrets.SSH_USER }}" >> $GITHUB_ENV
           
       - name: Transfer Python Script
         run: |
-          scp bot2.py ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}]:$SCRIPT_PATH
+          scp bot2.py ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}]:~/
           
       - name: Run Python Script on Server
         run: |
           ssh ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}] << EOF
-            cd $SCRIPT_PATH
+            cd ~
             python3 bot2.py
           EOF
