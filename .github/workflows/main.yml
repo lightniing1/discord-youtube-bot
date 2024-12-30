@@ -25,11 +25,11 @@ jobs:
           
       - name: Transfer Python Script
         run: |
-          scp my_script.py ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$SCRIPT_PATH
+          scp my_script.py ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}]:$SCRIPT_PATH
           
       - name: Run Python Script on Server
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+          ssh ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}] << EOF
             cd $SCRIPT_PATH
             python3 my_script.py
           EOF
