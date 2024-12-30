@@ -23,9 +23,9 @@ jobs:
         run: |
           echo "SCRIPT_PATH=/home/${{ secrets.SSH_USER }}" >> $GITHUB_ENV
           
-      - name: Transfer Python Script and requirements.txt
+      - name: Transfer Python Script
         run: |
-          scp bot2.py requirements.txt ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/
+          scp bot2.py requirements.txt ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}]:~/
           
       - name: Run Python Script on Server
         run: |
@@ -33,18 +33,13 @@ jobs:
             # Navigate to the home directory
             cd ~
             
-            # Set up the virtual environment
             python3 -m venv venv
             
-            # Activate the virtual environment
             source venv/bin/activate
             
-            # Install the dependencies from requirements.txt
             pip install -r requirements.txt
             
-            # Run the Python script inside the venv
             python bot2.py
             
-            # Optionally deactivate the venv after running
             deactivate
           EOF
