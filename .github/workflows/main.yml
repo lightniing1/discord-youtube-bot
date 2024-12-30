@@ -25,7 +25,7 @@ jobs:
           
       - name: Transfer Python Script
         run: |
-          scp my_script.py ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}]:$SCRIPT_PATH
+          scp bot2.py ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}]:$SCRIPT_PATH
           
       - name: Run Python Script on Server
         run: |
