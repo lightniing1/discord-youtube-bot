@@ -244,4 +244,5 @@ async def commands(ctx: commands.Context):
     await bot.command_logger.log_command(ctx, response)
 
 # Insira seu token aqui
-bot.run("")
+token = os.environ.get('TOKEN')
+bot.run(token)
