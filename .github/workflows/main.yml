@@ -29,7 +29,7 @@ jobs:
           
       - name: Run Python Script on Server
         run: |
-          ssh ${{ secrets.SSH_USER }}@[${{ secrets.SSH_HOST }}] << EOF
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
             cd ~
             python3 bot2.py
           EOF
