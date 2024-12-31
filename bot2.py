@@ -60,11 +60,7 @@ class MusicBot(commands.Bot):
         self.command_logger = CommandLogger()
         self.ytdl = yt_dlp.YoutubeDL({
             'format': 'bestaudio/best',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192',
-            }],
+            'postprocessors': [],
             'quiet': True,
             'noplaylist': True,
             'outtmpl': 'downloads/%(title)s.%(ext)s'
