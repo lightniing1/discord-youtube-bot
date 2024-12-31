@@ -13,6 +13,7 @@ Este repositório contém um bot de música para Discord desenvolvido em Python.
 
 - Python 3.8+
 - Token da API do Discord
+- ffmpeg
 - Bibliotecas Python necessárias (listadas em `requirements.txt`):
   - `discord`
   - `PyNaCl`
@@ -40,7 +41,7 @@ Este repositório contém um bot de música para Discord desenvolvido em Python.
 ### Comandos
 
 - **`!play <query>`**: Reproduz uma música a partir de uma URL ou termo de busca.
-  - Exemplo: `?play never gonna give you up`
+  - Exemplo: `!play never gonna give you up`
 
 - **`!skip`**: Pule a música atual.
 
