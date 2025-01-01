@@ -8,6 +8,7 @@ import logging
 from typing import Optional
 from dataclasses import dataclass
 from datetime import datetime
+from discord.ext import tasks
 
 # Configure file logging
 os.makedirs('logs', exist_ok=True)
