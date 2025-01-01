@@ -66,8 +66,8 @@ class MusicBot(commands.Bot):
             'outtmpl': 'downloads/%(title)s.%(ext)s'
         })
 
-    self.last_activity = {}
-    self.check_inactivity.start()
+        self.last_activity = {}
+        self.check_inactivity.start()
 
     async def setup_hook(self):
         """Create necessary directories on startup"""
