@@ -68,12 +68,12 @@ class MusicBot(commands.Bot):
         })
 
         self.last_activity = {}
-        self.check_inactivity.start()
 
     async def setup_hook(self):
         """Create necessary directories on startup"""
         os.makedirs('downloads', exist_ok=True)
         os.makedirs('logs', exist_ok=True)
+        self.check_inactivity.start()
 
     def get_queue(self, guild_id: int) -> deque:
         """Get or create queue for guild"""
@@ -123,6 +123,10 @@ class MusicBot(commands.Bot):
                 if not guild.voice_client.is_playing() and (datetime.now() - last_activity).total_seconds() > 600:  # 10 minutes
                     await guild.voice_client.disconnect()
                     logger.info(f"Disconnected from {guild.name} due to inactivity")
+
+    @check_inactivity.before_loop
+    async def before_check_inactivity(self):
+        await self.wait_until_ready()
 
     async def play_next(self, ctx: commands.Context):
         """Play next track in queue"""
