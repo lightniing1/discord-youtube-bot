@@ -54,7 +54,7 @@ class MusicBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
         intents.message_content = True
-        super().__init__(command_prefix="?", intents=intents)
+        super().__init__(command_prefix="!", intents=intents)
         
         self.music_queues = {}
         self.command_logger = CommandLogger()
@@ -65,6 +65,9 @@ class MusicBot(commands.Bot):
             'noplaylist': True,
             'outtmpl': 'downloads/%(title)s.%(ext)s'
         })
+
+    self.last_activity = {}
+    self.check_inactivity.start()
 
     async def setup_hook(self):
         """Create necessary directories on startup"""
@@ -110,13 +113,24 @@ class MusicBot(commands.Bot):
         except Exception as e:
             logger.error(f"Error deleting file {filepath}: {str(e)}")
 
+    @tasks.loop(minutes=1)
+    async def check_inactivity(self):
+        """Check for voice channel inactivity and disconnect if inactive for 10 minutes"""
+        for guild in self.guilds:
+            if guild.voice_client:
+                last_activity = self.last_activity.get(guild.id, datetime.now())
+                if not guild.voice_client.is_playing() and (datetime.now() - last_activity).total_seconds() > 600:  # 10 minutes
+                    await guild.voice_client.disconnect()
+                    logger.info(f"Disconnected from {guild.name} due to inactivity")
+
     async def play_next(self, ctx: commands.Context):
         """Play next track in queue"""
         queue = self.get_queue(ctx.guild.id)
+        self.last_activity[ctx.guild.id] = datetime.now()
         
         if not queue:
-            await ctx.voice_client.disconnect()
-            response = "Queue empty, disconnecting..."
+            #await ctx.voice_client.disconnect()
+            response = "Fila vazia"
             await self.command_logger.log_command(ctx, response)
             return
 
