@@ -145,9 +145,14 @@ class MusicBot(commands.Bot):
             def after_playback(error):
                 if error:
                     logger.error(f"Playback error: {str(error)}")
+                    
                 asyncio.run_coroutine_threadsafe(
                     self.cleanup_file(track.filepath), self.loop
                 )
+                
+                if ctx.voice_client:
+                    ctx.voice_client.stop()
+                    
                 asyncio.run_coroutine_threadsafe(
                     self.play_next(ctx), self.loop
                 )
