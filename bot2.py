@@ -92,7 +92,7 @@ class MusicBot(commands.Bot):
             if 'entries' in data:
                 data = data['entries'][0]
             
-            if data.get('duration', 0) < 60:
+            if data.get('duration', 0) < 30:
                 raise ValueError("Video muito curto ou Short do YouTube detectado.")
 
             return MusicTrack(
