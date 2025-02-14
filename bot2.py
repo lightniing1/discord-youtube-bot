@@ -9,6 +9,7 @@ from typing import Optional
 from dataclasses import dataclass
 from datetime import datetime
 from discord.ext import tasks
+import sys
 
 # Configure file logging
 os.makedirs('logs', exist_ok=True)
@@ -16,8 +17,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'logs/bot_{datetime.now().strftime("%Y%m%d")}.log', encoding='utf-8'),
-        logging.StreamHandler()
+        logging.StreamHandler(sys.stdout) # Output logs to stdout
     ]
 )
 logger = logging.getLogger(__name__)
@@ -72,7 +72,6 @@ class MusicBot(commands.Bot):
     async def setup_hook(self):
         """Create necessary directories on startup"""
         os.makedirs('downloads', exist_ok=True)
-        os.makedirs('logs', exist_ok=True)
         self.check_inactivity.start()
 
     def get_queue(self, guild_id: int) -> deque:
@@ -120,7 +119,7 @@ class MusicBot(commands.Bot):
         for guild in self.guilds:
             if guild.voice_client:
                 last_activity = self.last_activity.get(guild.id, datetime.now())
-                if not guild.voice_client.is_playing() and (datetime.now() - last_activity).total_seconds() > 600:  # 10 minutes
+                if not guild.voice_client.is_playing() and (datetime.now() - last_activity).total_seconds() > 120:  # 10 minutes
                     await guild.voice_client.disconnect()
                     logger.info(f"Disconnected from {guild.name} due to inactivity")
 
